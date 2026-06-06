@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LoRa Battery Monitoring Dashboard v3.0</title>
+  <title>LoRa Battery Monitoring Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -11,14 +11,24 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <style>
     :root {
-      --navy: #0b3d91; --navy-dark: #072d6b; --navy-light: #1a5dbd;
-      --accent: #00c6ff; --accent2: #38ef7d; --amber: #f59e0b;
-      --white: #ffffff; --bg: #f0f4fb; --surface: #ffffff;
-      --border: #dce8f8; --text: #1a2a44; --muted: #6b829e;
-      --on: #16a34a; --off: #dc2626;
+      --navy: #0b3d91;
+      --navy-dark: #072d6b;
+      --navy-light: #1a5dbd;
+      --accent: #00c6ff;
+      --accent2: #38ef7d;
+      --amber: #f59e0b;
+      --white: #ffffff;
+      --bg: #f0f4fb;
+      --surface: #ffffff;
+      --border: #dce8f8;
+      --text: #1a2a44;
+      --muted: #6b829e;
+      --on: #16a34a;
+      --off: #dc2626;
       --shadow: 0 4px 24px rgba(11,61,145,0.09);
       --shadow-lg: 0 8px 40px rgba(11,61,145,0.14);
-      --radius: 14px; --radius-sm: 8px;
+      --radius: 14px;
+      --radius-sm: 8px;
       --transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -58,21 +68,24 @@
     .update-ring { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); display: inline-block; animation: pulse-dot 2s infinite; }
     @keyframes value-flash { 0% { background: rgba(0,198,255,0.12); } 100% { background: transparent; } }
     .card.updated { animation: value-flash 0.6s ease; }
-    .relay-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-    .relay-card { background: var(--surface); border-radius: var(--radius); padding: 1rem 1.5rem; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; align-items: center; gap: 16px; flex: 1; min-width: 200px; }
-    .relay-icon { font-size: 26px; }
-    .relay-info { flex: 1; }
-    .relay-name { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }
-    .relay-state { font-family: 'Rajdhani', sans-serif; font-size: 1.4rem; font-weight: 700; margin-top: 2px; display: flex; align-items: center; gap: 10px; }
-    .relay-state.on { color: var(--on); }
-    .relay-state.off { color: var(--off); }
-    .toggle-btn { width: 52px; height: 28px; background: #e2e8f0; border-radius: 14px; position: relative; cursor: pointer; transition: var(--transition); border: none; outline: none; flex-shrink: 0; }
-    .toggle-btn::after { content: ''; position: absolute; width: 22px; height: 22px; border-radius: 50%; background: white; top: 3px; left: 3px; transition: var(--transition); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
-    .toggle-btn.on { background: linear-gradient(90deg, var(--on), #22c55e); }
-    .toggle-btn.on::after { left: 27px; }
-    .led-indicator { width: 20px; height: 20px; border-radius: 50%; display: inline-block; box-shadow: 0 0 4px currentColor; }
-    .led-indicator.on { background-color: var(--on); box-shadow: 0 0 6px var(--on); }
-    .led-indicator.off { background-color: var(--off); box-shadow: 0 0 4px var(--off); opacity: 0.7; }
+
+    /* Relay Indicator Modern */
+    .relay-row { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .relay-card { background: var(--surface); border-radius: var(--radius); padding: 1.25rem 1.5rem; box-shadow: var(--shadow); border: 1px solid var(--border); flex: 1; min-width: 260px; transition: var(--transition); }
+    .relay-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+    .relay-icon { font-size: 28px; }
+    .relay-title { font-weight: 700; font-size: 1rem; color: var(--text); letter-spacing: 0.5px; }
+    .relay-status { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+    .led-indicator { width: 24px; height: 24px; border-radius: 50%; box-shadow: 0 0 8px currentColor; transition: all 0.2s; }
+    .led-indicator.on { background-color: var(--on); box-shadow: 0 0 12px var(--on); }
+    .led-indicator.off { background-color: var(--off); box-shadow: 0 0 8px var(--off); opacity: 0.8; }
+    .relay-text { font-family: 'Rajdhani', sans-serif; font-size: 1.6rem; font-weight: 700; line-height: 1; }
+    .relay-text.on { color: var(--on); }
+    .relay-text.off { color: var(--off); }
+    .relay-threshold { font-size: 0.7rem; color: var(--muted); border-top: 1px dashed var(--border); padding-top: 0.75rem; margin-top: 0.5rem; display: flex; justify-content: space-between; }
+    .relay-threshold span:first-child { font-weight: 600; }
+    .warning { color: var(--amber); font-weight: 600; }
+
     .charts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
     .chart-card { background: var(--surface); border-radius: var(--radius); padding: 1.25rem; box-shadow: var(--shadow); border: 1px solid var(--border); }
     .chart-title { font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--navy); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 6px; }
@@ -112,7 +125,7 @@
 <body>
 <header>
   <div class="header-inner">
-    <div class="header-brand"><div class="brand-icon">⚡</div><div class="brand-text"><h1>LoRa Battery Monitoring Dashboard</h1><p>Realtime Monitoring & Control  v3.0 (Two-Way)</p></div></div>
+    <div class="header-brand"><div class="brand-icon">⚡</div><div class="brand-text"><h1>LoRa Battery Monitoring Dashboard</h1><p>Real‑time Monitoring PLTS Off‑Grid</p></div></div>
     <div class="header-meta"><div class="conn-badge" id="connBadge"><span class="conn-dot" id="connDot"></span><span id="connLabel">Disconnected</span></div><div id="clock">--:--:--</div></div>
   </div>
 </header>
@@ -140,24 +153,44 @@
     <div class="card snr-card" id="card-snr"><div class="card-header"><span class="card-label">SNR Signal</span><div class="card-icon amber">📊</div></div><div class="card-value" id="val-snr">—</div><div class="card-unit">dB (>0=baik, <-10=lemah)</div><div class="card-update"><span class="update-ring"></span> Live</div></div>
   </div>
 
-  <!-- RELAY CONTROL (TWO-WAY) -->
-  <p class="section-title">🔘 Relay Control (Jarak Jauh)</p>
+  <!-- RELAY STATUS INDICATOR (hanya indikator, tanpa kontrol) -->
+  <p class="section-title">🔌 Relay Status (Proteksi Baterai)</p>
   <div class="relay-row">
     <div class="relay-card">
-      <div class="relay-icon">⚡</div>
-      <div class="relay-info">
-        <div class="relay-name">Relay Charging</div>
-        <div class="relay-state off" id="relay-charge-state"><span class="led-indicator off" id="relay-charge-led"></span><span id="relay-charge-text">OFF</span></div>
+      <div class="relay-card-header">
+        <div class="relay-icon">🔋</div>
+        <div class="relay-title">RELAY CHARGING</div>
       </div>
-      <button class="toggle-btn off" id="relay-charge-btn"></button>
+      <div class="relay-status">
+        <div class="led-indicator off" id="charge-led"></div>
+        <div class="relay-text off" id="charge-text">OFF</div>
+      </div>
+      <div class="relay-threshold">
+        <span>🛡️ Batas atas (cut-off):</span>
+        <span><strong class="warning">≥ 14.7 V</strong> → Relay OFF</span>
+      </div>
+      <div class="relay-threshold">
+        <span>✅ Batas bawah (recover):</span>
+        <span><strong>≤ 13.8 V</strong> → Relay ON</span>
+      </div>
     </div>
     <div class="relay-card">
-      <div class="relay-icon">🔋</div>
-      <div class="relay-info">
-        <div class="relay-name">Relay Discharging</div>
-        <div class="relay-state off" id="relay-discharge-state"><span class="led-indicator off" id="relay-discharge-led"></span><span id="relay-discharge-text">OFF</span></div>
+      <div class="relay-card-header">
+        <div class="relay-icon">⚡</div>
+        <div class="relay-title">RELAY DISCHARGING</div>
       </div>
-      <button class="toggle-btn off" id="relay-discharge-btn"></button>
+      <div class="relay-status">
+        <div class="led-indicator off" id="discharge-led"></div>
+        <div class="relay-text off" id="discharge-text">OFF</div>
+      </div>
+      <div class="relay-threshold">
+        <span>🛡️ Batas bawah (cut-off):</span>
+        <span><strong class="warning">≤ 12.0 V</strong> → Relay OFF</span>
+      </div>
+      <div class="relay-threshold">
+        <span>✅ Batas atas (recover):</span>
+        <span><strong>≥ 12.2 V</strong> → Relay ON</span>
+      </div>
     </div>
   </div>
 
@@ -181,12 +214,14 @@
   </div>
   <div class="table-wrap">
     <div class="table-scroll">
-      <table id="dataTable"><thead><tr><th>Waktu</th><th>Charge V (V)</th><th>Charge I (mA)</th><th>Discharge V (V)</th><th>Discharge I (mA)</th><th>LDR</th><th>RSSI (dBm)</th><th>SNR (dB)</th><th>Relay Charging</th><th>Relay Discharging</th></tr></thead><tbody id="tableBody"><tr><td colspan="10" style="color:var(--muted);padding:2rem;">Menunggu data...</td></tr></tbody></table>
+      <table id="dataTable"><thead><tr><th>Waktu</th><th>Charge V (V)</th><th>Charge I (mA)</th><th>Discharge V (V)</th><th>Discharge I (mA)</th><th>LDR</th><th>RSSI (dBm)</th><th>SNR (dB)</th><th>Relay Charging</th><th>Relay Discharging</th></tr></thead><tbody id="tableBody"><tr><td colspan="10" style="color:var(--muted);padding:2rem;">Menunggu data...</td></tr></tbody>
     </div>
   </div>
   <div class="pagination" id="pagination"><span class="page-info" id="pageInfo">Halaman 1</span></div>
 </main>
-<footer><span>⚡</span> Developed for <span>IoT Battery Monitoring Research</span> using <span>ESP32 &amp; LoRa</span> &nbsp;|&nbsp; <span>v3.0</span> — Two‑Way Relay Control</footer>
+<footer>
+  <span>⚡</span> DEVELOPED BY <span>FEBRIAN VALINTINO</span> (NPM: <span>G1D022071</span>) FOR BATTERY MONITORING RESEARCH USING ESP32 &amp; LORA
+</footer>
 
 <script>
   const FIREBASE_CONFIG = {
@@ -203,18 +238,17 @@
   const CHART_MAX_PTS = 30;
   let db, allData = [], currentPage = 0, tablePage = 0;
   let charts = {};
-  let relayState = { charging: false, discharging: false };
 
   function updateClock() { document.getElementById('clock').textContent = new Date().toLocaleTimeString('id-ID', { hour12: false }); }
   setInterval(updateClock, 1000);
   updateClock();
 
   function initFirebase() {
-    try { firebase.initializeApp(FIREBASE_CONFIG); } catch(e) {}
+    try { firebase.initializeApp(FIREBASE_CONFIG); } catch(e) { console.warn(e); }
     db = firebase.database();
     setConnected(false);
     loadHistory();
-    listenFirebase();
+    listenLiveData();
     listenRelayStatus();
   }
 
@@ -224,18 +258,20 @@
   }
 
   function loadHistory() {
-    db.ref('/history').orderByChild('timestamp').limitToLast(200).once('value', snap => {
+    db.ref('/history').once('value', snap => {
       const raw = snap.val();
       if (!raw) return;
-      const entries = Object.values(raw).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+      const entries = Object.values(raw);
+      entries.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
       entries.forEach(d => addRow(d, false));
       renderTable(); renderPagination();
       entries.slice(0, CHART_MAX_PTS).reverse().forEach(d => pushChartPoint(d));
-    });
+      console.log(`Loaded ${entries.length} history entries`);
+    }).catch(err => console.error("History load error:", err));
   }
 
   let liveInitialized = false;
-  function listenFirebase() {
+  function listenLiveData() {
     db.ref('/live').on('value', snap => {
       const d = snap.val();
       if (!d) return;
@@ -259,32 +295,28 @@
   }
 
   function listenRelayStatus() {
-    db.ref('/relay/charging').on('value', snap => { if (snap.val() !== null) updateRelayUI('charging', snap.val()); });
-    db.ref('/relay/discharging').on('value', snap => { if (snap.val() !== null) updateRelayUI('discharging', snap.val()); });
+    // Hanya menampilkan status relay dari transmitter (tidak ada kontrol)
+    db.ref('/relay/charging').on('value', snap => {
+      if (snap.val() !== null) updateRelayUI('charging', snap.val());
+    });
+    db.ref('/relay/discharging').on('value', snap => {
+      if (snap.val() !== null) updateRelayUI('discharging', snap.val());
+    });
   }
 
   function updateRelayUI(name, state) {
     const isOn = (state === true);
-    const prefix = name === 'charging' ? 'charge' : 'discharge';
-    const stateDiv = document.getElementById(`relay-${prefix}-state`);
-    const ledSpan = document.getElementById(`relay-${prefix}-led`);
-    const textSpan = document.getElementById(`relay-${prefix}-text`);
-    const btn = document.getElementById(`relay-${prefix}-btn`);
-    if (stateDiv) stateDiv.className = `relay-state ${isOn ? 'on' : 'off'}`;
-    if (ledSpan) ledSpan.className = `led-indicator ${isOn ? 'on' : 'off'}`;
-    if (textSpan) textSpan.textContent = isOn ? 'ON' : 'OFF';
-    if (btn) btn.className = `toggle-btn ${isOn ? 'on' : 'off'}`;
-    relayState[name] = isOn;
-  }
-
-  async function toggleRelay(name) {
-    const newState = !relayState[name];
-    const btn = document.getElementById(`relay-${name === 'charging' ? 'charge' : 'discharge'}-btn`);
-    if (btn) btn.style.opacity = '0.6';
-    try {
-      await db.ref(`/relay/${name}_cmd`).set(newState);
-      setTimeout(() => { if (btn) btn.style.opacity = '1'; }, 500);
-    } catch(e) { console.error(e); if (btn) btn.style.opacity = '1'; }
+    if (name === 'charging') {
+      const led = document.getElementById('charge-led');
+      const textSpan = document.getElementById('charge-text');
+      if (led) led.className = `led-indicator ${isOn ? 'on' : 'off'}`;
+      if (textSpan) { textSpan.textContent = isOn ? 'ON' : 'OFF'; textSpan.className = `relay-text ${isOn ? 'on' : 'off'}`; }
+    } else if (name === 'discharging') {
+      const led = document.getElementById('discharge-led');
+      const textSpan = document.getElementById('discharge-text');
+      if (led) led.className = `led-indicator ${isOn ? 'on' : 'off'}`;
+      if (textSpan) { textSpan.textContent = isOn ? 'ON' : 'OFF'; textSpan.className = `relay-text ${isOn ? 'on' : 'off'}`; }
+    }
   }
 
   function updateCards(d) {
@@ -324,15 +356,32 @@
       rc: d.relay_charging ?? d.relayCharging ?? false,
       rd: d.relay_discharging ?? d.relayDischarging ?? false,
     };
-    allData.unshift(row);
-    if (updateUI) { renderTable(); renderPagination(); }
+    // Cegah duplikat sederhana
+    const exists = allData.some(ex => ex.ts === ts && ex.cv === row.cv && ex.di === row.di);
+    if (!exists) {
+      allData.unshift(row);
+      if (updateUI) { renderTable(); renderPagination(); }
+    }
   }
 
   function renderTable() {
     const pageRows = allData.slice(tablePage * ROWS_PER_PAGE, (tablePage + 1) * ROWS_PER_PAGE);
     const tbody = document.getElementById('tableBody');
     if (allData.length === 0) { tbody.innerHTML = '<tr><td colspan="10" style="color:var(--muted);padding:2rem;">Belum ada data.</td></tr>'; return; }
-    tbody.innerHTML = pageRows.map(r => `<tr><td class="timestamp">${r.ts}</td><td>${r.cv}</td><td>${r.ci}</td><td>${r.dv}</td><td>${r.di}</td><td>${r.ldr}</td><td>${r.rssi}</td><td class="${snrClass(r.snr)}">${r.snr}</td><td><span class="badge ${r.rc ? 'on' : 'off'}">${r.rc ? 'ON' : 'OFF'}</span></td><td><span class="badge ${r.rd ? 'on' : 'off'}">${r.rd ? 'ON' : 'OFF'}</span></td></tr>`).join('');
+    tbody.innerHTML = pageRows.map(r => `
+      <tr>
+        <td class="timestamp">${r.ts}</td>
+        <td>${r.cv}</td>
+        <td>${r.ci}</td>
+        <td>${r.dv}</td>
+        <td>${r.di}</td>
+        <td>${r.ldr}</td>
+        <td>${r.rssi}</td>
+        <td class="${snrClass(r.snr)}">${r.snr}</td>
+        <td><span class="badge ${r.rc ? 'on' : 'off'}">${r.rc ? 'ON' : 'OFF'}</span></td>
+        <td><span class="badge ${r.rd ? 'on' : 'off'}">${r.rd ? 'ON' : 'OFF'}</span></td>
+      </tr>
+    `).join('');
   }
 
   function renderPagination() {
@@ -365,16 +414,14 @@
     for (const [key, chart] of Object.entries(charts)) { chart.data.labels.push(label); chart.data.datasets[0].data.push(vals[key]??0); if (chart.data.labels.length > CHART_MAX_PTS) { chart.data.labels.shift(); chart.data.datasets[0].data.shift(); } chart.update('none'); }
   }
 
-  function exportCSV() { if (!allData.length) { alert('Tidak ada data.'); return; } const header = 'Waktu,Charge V (V),Charge I (mA),Discharge V (V),Discharge I (mA),LDR,RSSI (dBm),SNR (dB),Relay Charging,Relay Discharging'; const rows = allData.map(r => `${r.ts},${r.cv},${r.ci},${r.dv},${r.di},${r.ldr},${r.rssi},${r.snr},${r.rc?'ON':'OFF'},${r.rd?'ON':'OFF'}`); download('lora_monitoring_v3.csv', [header, ...rows].join('\n'), 'text/csv'); }
-  function exportExcel() { if (!allData.length) { alert('Tidak ada data.'); return; } const ws_data = [['Waktu','Charge V (V)','Charge I (mA)','Discharge V (V)','Discharge I (mA)','LDR','RSSI (dBm)','SNR (dB)','Relay Charging','Relay Discharging'], ...allData.map(r => [r.ts, +r.cv, +r.ci, +r.dv, +r.di, r.ldr, r.rssi, +r.snr, r.rc?'ON':'OFF', r.rd?'ON':'OFF'])]; const wb = XLSX.utils.book_new(); const ws = XLSX.utils.aoa_to_sheet(ws_data); ws['!cols'] = ws_data[0].map((_,i) => ({ wch: Math.max(...ws_data.map(row => String(row[i] || '').length)) + 2 })); XLSX.utils.book_append_sheet(wb, ws, 'Monitoring Data'); XLSX.writeFile(wb, 'lora_monitoring_v3.xlsx'); }
+  function exportCSV() { if (!allData.length) { alert('Tidak ada data.'); return; } const header = 'Waktu,Charge V (V),Charge I (mA),Discharge V (V),Discharge I (mA),LDR,RSSI (dBm),SNR (dB),Relay Charging,Relay Discharging'; const rows = allData.map(r => `${r.ts},${r.cv},${r.ci},${r.dv},${r.di},${r.ldr},${r.rssi},${r.snr},${r.rc?'ON':'OFF'},${r.rd?'ON':'OFF'}`); download('lora_monitoring.csv', [header, ...rows].join('\n'), 'text/csv'); }
+  function exportExcel() { if (!allData.length) { alert('Tidak ada data.'); return; } const ws_data = [['Waktu','Charge V (V)','Charge I (mA)','Discharge V (V)','Discharge I (mA)','LDR','RSSI (dBm)','SNR (dB)','Relay Charging','Relay Discharging'], ...allData.map(r => [r.ts, +r.cv, +r.ci, +r.dv, +r.di, r.ldr, r.rssi, +r.snr, r.rc?'ON':'OFF', r.rd?'ON':'OFF'])]; const wb = XLSX.utils.book_new(); const ws = XLSX.utils.aoa_to_sheet(ws_data); ws['!cols'] = ws_data[0].map((_,i) => ({ wch: Math.max(...ws_data.map(row => String(row[i] || '').length)) + 2 })); XLSX.utils.book_append_sheet(wb, ws, 'Monitoring Data'); XLSX.writeFile(wb, 'lora_monitoring.xlsx'); }
   function printData() { window.print(); }
   function clearTable() { if (!confirm('Hapus semua data dari tabel? (Firebase tidak terpengaruh)')) return; allData = []; tablePage = 0; renderTable(); renderPagination(); for (const c of Object.values(charts)) { c.data.labels = []; c.data.datasets[0].data = []; c.update(); } }
   function download(filename, text, mime) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: mime })); a.download = filename; a.click(); }
 
   initCharts();
   initFirebase();
-  document.getElementById('relay-charge-btn').onclick = () => toggleRelay('charging');
-  document.getElementById('relay-discharge-btn').onclick = () => toggleRelay('discharging');
 </script>
 </body>
 </html>
