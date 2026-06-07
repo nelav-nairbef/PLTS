@@ -10,6 +10,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <style>
+    /* (semua style sama seperti sebelumnya, tidak diubah) */
     :root {
       --navy: #0b3d91;
       --navy-dark: #072d6b;
@@ -257,16 +258,36 @@
     document.getElementById('connLabel').textContent = ok ? 'Live' : 'Disconnected';
   }
 
+  // ========== PERUBAHAN UTAMA DI SINI ==========
+  // Data history diurutkan dari terbaru ke terlama (baris pertama = data paling baru)
   function loadHistory() {
     db.ref('/history').once('value', snap => {
       const raw = snap.val();
       if (!raw) return;
-      const entries = Object.values(raw);
-      entries.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-      entries.forEach(d => addRow(d, false));
-      renderTable(); renderPagination();
-      entries.slice(0, CHART_MAX_PTS).reverse().forEach(d => pushChartPoint(d));
-      console.log(`Loaded ${entries.length} history entries`);
+      // Ambil semua nilai sebagai array
+      let entries = Object.values(raw);
+      // Urutkan descending berdasarkan timestamp (terbaru di awal)
+      entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      // Konversi ke format row yang digunakan dashboard
+      const rows = entries.map(d => ({
+        ts: d.timestamp || new Date().toLocaleString('id-ID'),
+        cv: parseFloat(d.charge_voltage ?? d.chargeVoltage ?? 0).toFixed(2),
+        ci: parseFloat(d.charge_current ?? d.chargeCurrent ?? 0).toFixed(1),
+        dv: parseFloat(d.discharge_voltage ?? d.dischargeVoltage ?? 0).toFixed(2),
+        di: parseFloat(d.discharge_current ?? d.dischargeCurrent ?? 0).toFixed(1),
+        ldr: parseInt(d.ldr ?? 0),
+        rssi: parseInt(d.rssi ?? 0),
+        snr: parseFloat(d.snr ?? 0).toFixed(1),
+        rc: d.relay_charging ?? d.relayCharging ?? false,
+        rd: d.relay_discharging ?? d.relayDischarging ?? false
+      }));
+      allData = rows; // Langsung assign array yang sudah terurut descending
+      renderTable();
+      renderPagination();
+      // Isi chart dengan data terbaru (30 titik dari awal array)
+      const latestForChart = allData.slice(0, CHART_MAX_PTS).reverse();
+      latestForChart.forEach(d => pushChartPoint(d));
+      console.log(`Loaded ${allData.length} history entries (terbaru di atas)`);
     }).catch(err => console.error("History load error:", err));
   }
 
@@ -277,7 +298,11 @@
       if (!d) return;
       setConnected(true);
       updateCards(d);
-      if (!liveInitialized) { liveInitialized = true; return; }
+      if (!liveInitialized) { 
+        liveInitialized = true; 
+        return; 
+      }
+      // Tambahkan data baru di bagian atas (unshift)
       addRow(d, true);
       pushChartPoint(d);
     }, err => { setConnected(false); console.error(err); });
@@ -295,13 +320,8 @@
   }
 
   function listenRelayStatus() {
-    // Hanya menampilkan status relay dari transmitter (tidak ada kontrol)
-    db.ref('/relay/charging').on('value', snap => {
-      if (snap.val() !== null) updateRelayUI('charging', snap.val());
-    });
-    db.ref('/relay/discharging').on('value', snap => {
-      if (snap.val() !== null) updateRelayUI('discharging', snap.val());
-    });
+    db.ref('/relay/charging').on('value', snap => { if (snap.val() !== null) updateRelayUI('charging', snap.val()); });
+    db.ref('/relay/discharging').on('value', snap => { if (snap.val() !== null) updateRelayUI('discharging', snap.val()); });
   }
 
   function updateRelayUI(name, state) {
@@ -342,6 +362,7 @@
 
   function snrClass(val) { const n = parseFloat(val); if (n > 0) return 'snr-good'; if (n >= -10) return 'snr-ok'; return 'snr-bad'; }
 
+  // Fungsi addRow untuk data live (menambahkan di awal array)
   function addRow(d, updateUI) {
     const ts = d.timestamp || new Date().toLocaleString('id-ID');
     const row = {
@@ -356,10 +377,10 @@
       rc: d.relay_charging ?? d.relayCharging ?? false,
       rd: d.relay_discharging ?? d.relayDischarging ?? false,
     };
-    // Cegah duplikat sederhana
-    const exists = allData.some(ex => ex.ts === ts && ex.cv === row.cv && ex.di === row.di);
+    // Cegah duplikat berdasarkan timestamp + cv (sederhana)
+    const exists = allData.some(ex => ex.ts === ts && ex.cv === row.cv);
     if (!exists) {
-      allData.unshift(row);
+      allData.unshift(row); // Tambah di depan (terbaru)
       if (updateUI) { renderTable(); renderPagination(); }
     }
   }
@@ -409,9 +430,21 @@
   function initCharts() { charts.cv = makeChart('chartCV','Charge V','#0b3d91'); charts.dv = makeChart('chartDV','Discharge V','#1a5dbd'); charts.ci = makeChart('chartCI','Charge I','#00c6ff'); charts.di = makeChart('chartDI','Discharge I','#38ef7d'); charts.snr = makeChart('chartSNR','SNR','#f59e0b'); }
 
   function pushChartPoint(d) {
-    const label = (d.timestamp || '').slice(11,19) || new Date().toLocaleTimeString('id-ID');
-    const vals = { cv: parseFloat(d.charge_voltage??d.chargeVoltage??0), dv: parseFloat(d.discharge_voltage??d.dischargeVoltage??0), ci: parseFloat(d.charge_current??d.chargeCurrent??0), di: parseFloat(d.discharge_current??d.dischargeCurrent??0), snr: parseFloat(d.snr??0) };
-    for (const [key, chart] of Object.entries(charts)) { chart.data.labels.push(label); chart.data.datasets[0].data.push(vals[key]??0); if (chart.data.labels.length > CHART_MAX_PTS) { chart.data.labels.shift(); chart.data.datasets[0].data.shift(); } chart.update('none'); }
+    // d adalah row object (bukan snapshot Firebase langsung)
+    const label = (d.timestamp || d.ts || '').slice(11,19) || new Date().toLocaleTimeString('id-ID');
+    const vals = { 
+      cv: parseFloat(d.cv), 
+      dv: parseFloat(d.dv), 
+      ci: parseFloat(d.ci), 
+      di: parseFloat(d.di), 
+      snr: parseFloat(d.snr) 
+    };
+    for (const [key, chart] of Object.entries(charts)) {
+      chart.data.labels.push(label);
+      chart.data.datasets[0].data.push(vals[key] ?? 0);
+      if (chart.data.labels.length > CHART_MAX_PTS) { chart.data.labels.shift(); chart.data.datasets[0].data.shift(); }
+      chart.update('none');
+    }
   }
 
   function exportCSV() { if (!allData.length) { alert('Tidak ada data.'); return; } const header = 'Waktu,Charge V (V),Charge I (mA),Discharge V (V),Discharge I (mA),LDR,RSSI (dBm),SNR (dB),Relay Charging,Relay Discharging'; const rows = allData.map(r => `${r.ts},${r.cv},${r.ci},${r.dv},${r.di},${r.ldr},${r.rssi},${r.snr},${r.rc?'ON':'OFF'},${r.rd?'ON':'OFF'}`); download('lora_monitoring.csv', [header, ...rows].join('\n'), 'text/csv'); }
