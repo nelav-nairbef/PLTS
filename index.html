@@ -277,9 +277,9 @@
         // ===== WEATHER (ADC TINGGI = GELAP) =====
         function getWeather(ldr) {
             const v = parseInt(ldr) || 0;
-            if (v > 800) return { scene: 'night', label: 'Gelap / Malam 🌙', desc: 'Intensitas cahaya sangat rendah', sun: false, moon: true, clouds: false, stormy: false };
-            if (v > 500) return { scene: 'cloudy', label: 'Mendung ☁️', desc: 'Langit tertutup awan gelap', sun: false, moon: false, clouds: true, stormy: true };
-            if (v > 200) return { scene: 'partly-cloudy', label: 'Berawan Sebagian ⛅', desc: 'Awan tipis, matahari masih terlihat', sun: true, moon: false, clouds: true, stormy: false };
+            if (v > 1100) return { scene: 'night', label: 'Gelap / Malam 🌙', desc: 'Intensitas cahaya sangat rendah', sun: false, moon: true, clouds: false, stormy: false };
+            if (v > 600) return { scene: 'cloudy', label: 'Mendung ☁️', desc: 'Langit tertutup awan gelap', sun: false, moon: false, clouds: true, stormy: true };
+            if (v > 100) return { scene: 'partly-cloudy', label: 'Berawan Sebagian ⛅', desc: 'Awan tipis, matahari masih terlihat', sun: true, moon: false, clouds: true, stormy: false };
             return { scene: 'sunny', label: 'Cerah ☀️', desc: 'Matahari bersinar terang', sun: true, moon: false, clouds: false, stormy: false };
         }
 
