@@ -136,15 +136,8 @@
       box-shadow: 0 0 12px rgba(220, 38, 38, 0.5);
     }
     @keyframes pulse-dot {
-      0%,
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-      50% {
-        opacity: 0.5;
-        transform: scale(1.2);
-      }
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
     }
     #clock {
       font-family: 'JetBrains Mono', monospace;
@@ -235,8 +228,8 @@
       box-shadow: var(--shadow-sm);
       border: 1px solid var(--glass-edge);
       transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-        box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-        background 0.3s;
+                  box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  background 0.3s;
       overflow: hidden;
       position: relative;
     }
@@ -341,7 +334,7 @@
       box-shadow: var(--shadow-sm);
       border: 1px solid var(--glass-edge);
       transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-        box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                  box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       position: relative;
       overflow: hidden;
       text-align: center;
@@ -408,17 +401,11 @@
       bottom: 0;
       width: 0%;
       transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
-        background 0.5s ease;
+                  background 0.5s ease;
     }
-    .battery-icon-fill.high {
-      background: linear-gradient(90deg, #16a34a, #4ade80);
-    }
-    .battery-icon-fill.mid {
-      background: linear-gradient(90deg, #f59e0b, #fbbf24);
-    }
-    .battery-icon-fill.low {
-      background: linear-gradient(90deg, #dc2626, #f87171);
-    }
+    .battery-icon-fill.high { background: linear-gradient(90deg, #16a34a, #4ade80); }
+    .battery-icon-fill.mid  { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+    .battery-icon-fill.low  { background: linear-gradient(90deg, #dc2626, #f87171); }
     .battery-icon-pct {
       position: relative;
       z-index: 2;
@@ -426,7 +413,7 @@
       font-weight: 700;
       font-size: 0.9rem;
       color: #0b2b1a;
-      text-shadow: 0 0 5px rgba(255, 255, 255, 0.95), 0 0 5px rgba(255, 255, 255, 0.95);
+      text-shadow: 0 0 5px rgba(255,255,255,0.95), 0 0 5px rgba(255,255,255,0.95);
     }
     .battery-icon-nub {
       width: 7px;
@@ -461,21 +448,10 @@
       font-size: 0.72rem;
       font-weight: 700;
     }
-    .battery-condition.high {
-      background: #dcfce7;
-      color: #16a34a;
-    }
-    .battery-condition.mid {
-      background: #fef3c7;
-      color: #b45309;
-    }
-    .battery-condition.low {
-      background: #fee2e2;
-      color: #dc2626;
-    }
-    .card-update.center {
-      justify-content: center;
-    }
+    .battery-condition.high { background: #dcfce7; color: #16a34a; }
+    .battery-condition.mid  { background: #fef3c7; color: #b45309; }
+    .battery-condition.low  { background: #fee2e2; color: #dc2626; }
+    .card-update.center { justify-content: center; }
 
     /* Legend */
     .soc-legend {
@@ -493,26 +469,16 @@
       border-radius: 40px;
       border: 1px solid var(--glass-edge);
     }
-    .soc-legend span {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
+    .soc-legend span { display: inline-flex; align-items: center; gap: 5px; }
     .dot-leg {
       width: 8px;
       height: 8px;
       border-radius: 50%;
       display: inline-block;
     }
-    .dot-leg.high {
-      background: #16a34a;
-    }
-    .dot-leg.mid {
-      background: #f59e0b;
-    }
-    .dot-leg.low {
-      background: #dc2626;
-    }
+    .dot-leg.high { background: #16a34a; }
+    .dot-leg.mid  { background: #f59e0b; }
+    .dot-leg.low  { background: #dc2626; }
 
     /* ===== CHARTS ===== */
     .charts-grid {
@@ -530,7 +496,7 @@
       box-shadow: var(--shadow-sm);
       border: 1px solid rgba(255, 255, 255, 0.6);
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-        box-shadow 0.3s;
+                  box-shadow 0.3s;
     }
     .chart-card:hover {
       transform: translateY(-4px);
@@ -546,10 +512,7 @@
       gap: 8px;
       align-items: center;
     }
-    .chart-canvas-wrap {
-      height: 180px;
-      position: relative;
-    }
+    .chart-canvas-wrap { height: 180px; position: relative; }
 
     /* ===== BUTTONS ===== */
     .btn-row {
@@ -571,7 +534,7 @@
       font-family: 'Inter', sans-serif;
       letter-spacing: 0.4px;
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-        box-shadow 0.3s, background 0.3s;
+                  box-shadow 0.3s, background 0.3s;
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
       position: relative;
@@ -583,36 +546,26 @@
       position: absolute;
       inset: 0;
       border-radius: 40px;
-      background: rgba(255, 255, 255, 0);
+      background: rgba(255,255,255,0);
       transition: background 0.3s;
     }
-    .btn:active::after {
-      background: rgba(255, 255, 255, 0.2);
-    }
-    .btn:focus-visible {
-      outline: 2px solid var(--navy);
-      outline-offset: 2px;
-    }
+    .btn:active::after { background: rgba(255,255,255,0.2); }
+    .btn:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
     .btn-primary {
       background: linear-gradient(115deg, var(--navy), var(--navy-light));
       color: white;
-      box-shadow: 0 4px 12px rgba(11, 61, 145, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 12px rgba(11,61,145,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
     }
     .btn-danger {
-      background: rgba(220, 38, 38, 0.12);
+      background: rgba(220,38,38,0.12);
       color: #b91c1c;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(220, 38, 38, 0.3);
+      border: 1px solid rgba(220,38,38,0.3);
     }
-    .btn:hover {
-      transform: scale(1.03);
-      box-shadow: var(--shadow-md);
-    }
-    .btn:active {
-      transform: scale(0.95);
-    }
+    .btn:hover { transform: scale(1.03); box-shadow: var(--shadow-md); }
+    .btn:active { transform: scale(0.95); }
 
     /* ===== TABLE ===== */
     .table-wrap {
@@ -648,22 +601,14 @@
       font-weight: 600;
       letter-spacing: 0.5px;
     }
-    thead th:first-child {
-      border-radius: var(--radius-sm) 0 0 0;
-    }
-    thead th:last-child {
-      border-radius: 0 var(--radius-sm) 0 0;
-    }
+    thead th:first-child { border-radius: var(--radius-sm) 0 0 0; }
+    thead th:last-child  { border-radius: 0 var(--radius-sm) 0 0; }
     tbody tr {
       transition: background 0.2s ease;
       border-bottom: 1px solid rgba(11, 61, 145, 0.06);
     }
-    tbody tr:last-child {
-      border-bottom: none;
-    }
-    tbody tr:hover {
-      background: rgba(11, 61, 145, 0.04);
-    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(11, 61, 145, 0.04); }
     td {
       padding: 12px 10px;
       text-align: center;
@@ -673,9 +618,7 @@
       white-space: nowrap;
       border-bottom: 1px solid rgba(11, 61, 145, 0.05);
     }
-    tbody tr:last-child td {
-      border-bottom: none;
-    }
+    tbody tr:last-child td { border-bottom: none; }
     .empty-row td {
       color: var(--muted);
       padding: 2rem;
@@ -712,21 +655,14 @@
       font-weight: 700;
       transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .page-btn.active,
-    .page-btn:hover {
+    .page-btn.active, .page-btn:hover {
       background: var(--navy);
       color: white;
       transform: scale(1.05);
       box-shadow: var(--shadow-sm);
     }
-    .page-btn:focus-visible {
-      outline: 2px solid var(--navy);
-      outline-offset: 2px;
-    }
-    .page-btn:disabled {
-      opacity: 0.4;
-      pointer-events: none;
-    }
+    .page-btn:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+    .page-btn:disabled { opacity: 0.4; pointer-events: none; }
 
     /* ===== FOOTER ===== */
     footer {
@@ -741,82 +677,68 @@
     }
 
     /* ===== ANIMATIONS ===== */
-    @keyframes tableSlideIn {
-      0% {
-        opacity: 0;
-        transform: translateY(12px) scale(0.98);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+    @keyframes rowSlideIn {
+      0% { opacity: 0; transform: translateX(-12px) scale(0.98); }
+      100% { opacity: 1; transform: translateX(0) scale(1); }
     }
-    .table-slide-in {
-      animation: tableSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    .table-slide-in tr {
+      animation: rowSlideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      opacity: 0;
     }
+    /* Staggered delay for each row */
+    .table-slide-in tr:nth-child(1) { animation-delay: 0.05s; }
+    .table-slide-in tr:nth-child(2) { animation-delay: 0.10s; }
+    .table-slide-in tr:nth-child(3) { animation-delay: 0.15s; }
+    .table-slide-in tr:nth-child(4) { animation-delay: 0.20s; }
+    .table-slide-in tr:nth-child(5) { animation-delay: 0.25s; }
+    .table-slide-in tr:nth-child(6) { animation-delay: 0.30s; }
+    .table-slide-in tr:nth-child(7) { animation-delay: 0.35s; }
+    .table-slide-in tr:nth-child(8) { animation-delay: 0.40s; }
+    .table-slide-in tr:nth-child(9) { animation-delay: 0.45s; }
+    .table-slide-in tr:nth-child(10) { animation-delay: 0.50s; }
+    .table-slide-in tr:nth-child(11) { animation-delay: 0.55s; }
+    .table-slide-in tr:nth-child(12) { animation-delay: 0.60s; }
+    .table-slide-in tr:nth-child(13) { animation-delay: 0.65s; }
+    .table-slide-in tr:nth-child(14) { animation-delay: 0.70s; }
+    .table-slide-in tr:nth-child(15) { animation-delay: 0.75s; }
+    .table-slide-in tr:nth-child(16) { animation-delay: 0.80s; }
+    .table-slide-in tr:nth-child(17) { animation-delay: 0.85s; }
+    .table-slide-in tr:nth-child(18) { animation-delay: 0.90s; }
+    .table-slide-in tr:nth-child(19) { animation-delay: 0.95s; }
+    .table-slide-in tr:nth-child(20) { animation-delay: 1.00s; }
+
     .btn-click-spring {
       animation: apple-spring 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
     @keyframes apple-spring {
-      0% {
-        transform: scale(1);
-      }
-      22% {
-        transform: scale(0.92);
-      }
-      50% {
-        transform: scale(1.05);
-      }
-      72% {
-        transform: scale(0.97);
-      }
-      100% {
-        transform: scale(1);
-      }
+      0% { transform: scale(1); }
+      22% { transform: scale(0.92); }
+      50% { transform: scale(1.05); }
+      72% { transform: scale(0.97); }
+      100% { transform: scale(1); }
     }
     .btn-click-glow {
       animation: apple-glow 0.6s ease forwards;
     }
     @keyframes apple-glow {
-      0% {
-        box-shadow: 0 0 0 0 rgba(11, 61, 145, 0.5);
-      }
-      60% {
-        box-shadow: 0 0 20px 8px rgba(11, 61, 145, 0.15);
-      }
-      100% {
-        box-shadow: 0 0 0 0 rgba(11, 61, 145, 0);
-      }
+      0% { box-shadow: 0 0 0 0 rgba(11,61,145,0.5); }
+      60% { box-shadow: 0 0 20px 8px rgba(11,61,145,0.15); }
+      100% { box-shadow: 0 0 0 0 rgba(11,61,145,0); }
     }
 
     /* Responsive */
     @media (max-width: 768px) {
-      .cards-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .charts-grid {
-        grid-template-columns: 1fr;
-      }
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .charts-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 480px) {
-      .cards-grid {
-        grid-template-columns: 1fr;
-      }
-      header {
-        padding: 0 1rem;
-      }
-      .header-inner {
-        height: auto;
-        padding: 0.7rem 0;
-      }
-      .brand-text h1 {
-        font-size: 1.1rem;
-      }
+      .cards-grid { grid-template-columns: 1fr; }
+      header { padding: 0 1rem; }
+      .header-inner { height: auto; padding: 0.7rem 0; }
+      .brand-text h1 { font-size: 1.1rem; }
     }
     @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
+      *, *::before, *::after {
         animation-duration: 0.001ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.001ms !important;
@@ -859,47 +781,47 @@
     <!-- Realtime Values -->
     <p class="section-title">🔋 Realtime Sensor Values</p>
     <div class="cards-grid">
-      <!-- Battery Utama -->
+      <!-- Baterai 1 -->
       <div class="battery-card">
         <div class="battery-card-header">
-          <span class="battery-card-label">🔋 Battery Utama</span>
+          <span class="battery-card-label">🔋 Baterai 1</span>
           <span class="battery-card-tag">GPIO33</span>
         </div>
         <div class="battery-visual">
           <div class="battery-icon-shell">
-            <div class="battery-icon-fill" id="fillUtama"></div>
-            <span class="battery-icon-pct" id="pctUtama">--%</span>
+            <div class="battery-icon-fill" id="fill1"></div>
+            <span class="battery-icon-pct" id="pct1">--%</span>
           </div>
           <div class="battery-icon-nub"></div>
         </div>
-        <div class="battery-voltage" id="voltUtama">-- V</div>
+        <div class="battery-voltage" id="volt1">-- V</div>
         <div class="battery-soc-dod">
-          <span>SOC <b id="socUtama">--%</b></span>
-          <span>DOD <b id="dodUtama">--%</b></span>
+          <span>SOC <b id="soc1">--%</b></span>
+          <span>DOD <b id="dod1">--%</b></span>
         </div>
-        <div class="battery-condition" id="condUtama">--</div>
+        <div class="battery-condition" id="cond1">--</div>
         <div class="card-update center"><span class="update-ring"></span> Live</div>
       </div>
 
-      <!-- Battery Backup -->
+      <!-- Baterai 2 -->
       <div class="battery-card">
         <div class="battery-card-header">
-          <span class="battery-card-label">🔋 Battery Backup</span>
+          <span class="battery-card-label">🔋 Baterai 2</span>
           <span class="battery-card-tag">GPIO32</span>
         </div>
         <div class="battery-visual">
           <div class="battery-icon-shell">
-            <div class="battery-icon-fill" id="fillBackup"></div>
-            <span class="battery-icon-pct" id="pctBackup">--%</span>
+            <div class="battery-icon-fill" id="fill2"></div>
+            <span class="battery-icon-pct" id="pct2">--%</span>
           </div>
           <div class="battery-icon-nub"></div>
         </div>
-        <div class="battery-voltage" id="voltBackup">-- V</div>
+        <div class="battery-voltage" id="volt2">-- V</div>
         <div class="battery-soc-dod">
-          <span>SOC <b id="socBackup">--%</b></span>
-          <span>DOD <b id="dodBackup">--%</b></span>
+          <span>SOC <b id="soc2">--%</b></span>
+          <span>DOD <b id="dod2">--%</b></span>
         </div>
-        <div class="battery-condition" id="condBackup">--</div>
+        <div class="battery-condition" id="cond2">--</div>
         <div class="card-update center"><span class="update-ring"></span> Live</div>
       </div>
 
@@ -971,8 +893,8 @@
           <thead>
             <tr>
               <th>Waktu</th>
-              <th>V. Utama</th>
-              <th>V. Backup</th>
+              <th>V. Baterai 1</th>
+              <th>V. Baterai 2</th>
               <th>I. Charge</th>
               <th>I. Load</th>
               <th>Charging</th>
@@ -1037,14 +959,11 @@
     }
 
     function socBand(pct) { return pct >= 50 ? 'high' : (pct >= 20 ? 'mid' : 'low'); }
-
     function socLabel(pct) { return pct >= 50 ? 'Baik' : (pct >= 20 ? 'Waspada' : 'Kritis'); }
 
     // ===== HELPERS DOM =====
     function setText(id, text) { const el = document.getElementById(id); if (el) el.textContent = text; }
-
     function setStyle(id, prop, val) { const el = document.getElementById(id); if (el) el.style[prop] = val; }
-
     function setClass(id, cls) { const el = document.getElementById(id); if (el) el.className = cls; }
 
     function toggleBadge(id, isOn) {
@@ -1072,8 +991,9 @@
     // ===== UPDATE CARD =====
     function updateLiveCards(d) {
       if (!d) return;
-      const vUtama = parseFloat(d.battery_utama?.voltage ?? 0);
-      const vBackup = parseFloat(d.battery_backup?.voltage ?? 0);
+      // Path baru: battery_1 dan battery_2 (sesuai ESP32)
+      const v1 = parseFloat(d.battery_1?.voltage ?? 0);
+      const v2 = parseFloat(d.battery_2?.voltage ?? 0);
       const chargeStatus = d.charging?.status ?? '--';
       const chargeBattery = d.charging?.battery ?? '--';
       const chargeCurrent = parseFloat(d.charging?.current ?? 0);
@@ -1083,8 +1003,8 @@
       const testPhase = d.test_phase ?? '--';
       const timestamp = d.timestamp ?? '--';
 
-      updateBatteryGauge('Utama', vUtama);
-      updateBatteryGauge('Backup', vBackup);
+      updateBatteryGauge('1', v1);
+      updateBatteryGauge('2', v2);
 
       setText('chargingStatusBadge', chargeStatus);
       toggleBadge('chargingStatusBadge', chargeStatus === 'ON');
@@ -1097,7 +1017,7 @@
       setText('loadCurrentVal', loadCurrent.toFixed(2) + ' A');
 
       setText('testPhaseStrip', testPhase);
-      pushChartData(timestamp, vUtama, vBackup, chargeCurrent, loadCurrent);
+      pushChartData(timestamp, v1, v2, chargeCurrent, loadCurrent);
     }
 
     // ===== REST API =====
@@ -1139,9 +1059,7 @@
         const resp = await fetch(`${DB_URL}/history.json?orderBy="$key"&limitToLast=200`);
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const raw = await resp.json();
-        if (!raw) { allHistory = [];
-          renderTable();
-          renderPagination(); return; }
+        if (!raw) { allHistory = []; renderTable(); renderPagination(); return; }
         allHistory = Object.values(raw).sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''));
         renderTable();
         renderPagination();
@@ -1159,20 +1077,21 @@
       }
       const pageRows = allHistory.slice(tablePage * ROWS_PER_PAGE, (tablePage + 1) * ROWS_PER_PAGE);
       tbody.innerHTML = pageRows.map(r => {
-        const vU = parseFloat(r.battery_utama?.voltage ?? 0).toFixed(2);
-        const vB = parseFloat(r.battery_backup?.voltage ?? 0).toFixed(2);
+        const v1 = parseFloat(r.battery_1?.voltage ?? 0).toFixed(2);
+        const v2 = parseFloat(r.battery_2?.voltage ?? 0).toFixed(2);
         const iC = parseFloat(r.charging?.current ?? 0).toFixed(2);
         const iL = parseFloat(r.load?.current ?? 0).toFixed(2);
         const chg = `${r.charging?.status ?? '-'} · ${r.charging?.battery ?? '-'}`;
         const ld = `${r.load?.status ?? '-'} · ${r.load?.battery ?? '-'}`;
-        return `<tr><td>${r.timestamp ?? '-'}</td><td>${vU}</td><td>${vB}</td><td>${iC}</td><td>${iL}</td><td>${chg}</td><td>${ld}</td><td>${r.test_phase ?? '-'}</td></tr>`;
+        return `<tr><td>${r.timestamp ?? '-'}</td><td>${v1}</td><td>${v2}</td><td>${iC}</td><td>${iL}</td><td>${chg}</td><td>${ld}</td><td>${r.test_phase ?? '-'}</td></tr>`;
       }).join('');
 
-      // Animasi slide-in
+      // Animasi per baris (stagger)
       tbody.classList.remove('table-slide-in');
       void tbody.offsetWidth;
       tbody.classList.add('table-slide-in');
-      setTimeout(() => tbody.classList.remove('table-slide-in'), 400);
+      // Hapus class setelah animasi selesai (agar tidak mengganggu update berikutnya)
+      setTimeout(() => tbody.classList.remove('table-slide-in'), 1200);
     }
 
     function renderPagination() {
@@ -1212,31 +1131,27 @@
         data: {
           labels: [],
           datasets: [
-            { label: 'Utama', data: [], borderColor: '#0b3d91', backgroundColor: '#0b3d9120', fill: true, tension: 0.4,
-              pointRadius: 2 },
-            { label: 'Backup', data: [], borderColor: '#00c6ff', backgroundColor: '#00c6ff20', fill: true, tension: 0.4,
-              pointRadius: 2 }
+            { label: 'Baterai 1', data: [], borderColor: '#0b3d91', backgroundColor: '#0b3d9120', fill: true, tension: 0.4, pointRadius: 2 },
+            { label: 'Baterai 2', data: [], borderColor: '#00c6ff', backgroundColor: '#00c6ff20', fill: true, tension: 0.4, pointRadius: 2 }
           ]
         },
         options: { ...baseOpts, plugins: { legend: { display: true, labels: { boxWidth: 12, font: { size: 10 } } } } }
       });
       charts.charge = new Chart(document.getElementById('chartCharge'), {
         type: 'line',
-        data: { labels: [], datasets: [{ label: 'Arus Charging', data: [], borderColor: '#16a34a',
-            backgroundColor: '#16a34a20', fill: true, tension: 0.4, pointRadius: 2 }] },
+        data: { labels: [], datasets: [{ label: 'Arus Charging', data: [], borderColor: '#16a34a', backgroundColor: '#16a34a20', fill: true, tension: 0.4, pointRadius: 2 }] },
         options: { ...baseOpts, plugins: { legend: { display: false } } }
       });
       charts.load = new Chart(document.getElementById('chartLoad'), {
         type: 'line',
-        data: { labels: [], datasets: [{ label: 'Arus Load', data: [], borderColor: '#f59e0b',
-            backgroundColor: '#f59e0b20', fill: true, tension: 0.4, pointRadius: 2 }] },
+        data: { labels: [], datasets: [{ label: 'Arus Load', data: [], borderColor: '#f59e0b', backgroundColor: '#f59e0b20', fill: true, tension: 0.4, pointRadius: 2 }] },
         options: { ...baseOpts, plugins: { legend: { display: false } } }
       });
     }
 
-    function pushChartData(timestamp, vU, vB, iC, iL) {
+    function pushChartData(timestamp, v1, v2, iC, iL) {
       const label = (timestamp || '').slice(11, 19) || new Date().toLocaleTimeString('id-ID');
-      pushPoint(charts.voltage, label, [vU, vB]);
+      pushPoint(charts.voltage, label, [v1, v2]);
       pushPoint(charts.charge, label, [iC]);
       pushPoint(charts.load, label, [iL]);
     }
@@ -1275,13 +1190,17 @@
     function handleExportExcel() {
       if (!allHistory.length) return;
       const rows = [
-        ['Waktu', 'V.Utama (V)', 'V.Backup (V)', 'I.Charge (A)', 'I.Load (A)', 'Charging', 'Load', 'Fase Test']
+        ['Waktu', 'V.Baterai 1 (V)', 'V.Baterai 2 (V)', 'I.Charge (A)', 'I.Load (A)', 'Charging', 'Load', 'Fase Test']
       ];
       allHistory.forEach(r => rows.push([
-        r.timestamp ?? '-', parseFloat(r.battery_utama?.voltage ?? 0), parseFloat(r.battery_backup?.voltage ?? 0),
-        parseFloat(r.charging?.current ?? 0), parseFloat(r.load?.current ?? 0),
+        r.timestamp ?? '-',
+        parseFloat(r.battery_1?.voltage ?? 0),
+        parseFloat(r.battery_2?.voltage ?? 0),
+        parseFloat(r.charging?.current ?? 0),
+        parseFloat(r.load?.current ?? 0),
         `${r.charging?.status ?? '-'} - ${r.charging?.battery ?? '-'}`,
-        `${r.load?.status ?? '-'} - ${r.load?.battery ?? '-'}`, r.test_phase ?? '-'
+        `${r.load?.status ?? '-'} - ${r.load?.battery ?? '-'}`,
+        r.test_phase ?? '-'
       ]));
       const wb = XLSX.utils.book_new(),
         ws = XLSX.utils.aoa_to_sheet(rows);
@@ -1291,13 +1210,16 @@
 
     function handleExportCSV() {
       if (!allHistory.length) return;
-      const header = 'Waktu,V.Utama (V),V.Backup (V),I.Charge (A),I.Load (A),Charging,Load,Fase Test';
+      const header = 'Waktu,V.Baterai 1 (V),V.Baterai 2 (V),I.Charge (A),I.Load (A),Charging,Load,Fase Test';
       const rows = allHistory.map(r => [
-        r.timestamp ?? '-', parseFloat(r.battery_utama?.voltage ?? 0).toFixed(2), parseFloat(r.battery_backup?.voltage ??
-          0).toFixed(2),
-        parseFloat(r.charging?.current ?? 0).toFixed(2), parseFloat(r.load?.current ?? 0).toFixed(2),
+        r.timestamp ?? '-',
+        parseFloat(r.battery_1?.voltage ?? 0).toFixed(2),
+        parseFloat(r.battery_2?.voltage ?? 0).toFixed(2),
+        parseFloat(r.charging?.current ?? 0).toFixed(2),
+        parseFloat(r.load?.current ?? 0).toFixed(2),
         `${r.charging?.status ?? '-'} - ${r.charging?.battery ?? '-'}`,
-        `${r.load?.status ?? '-'} - ${r.load?.battery ?? '-'}`, r.test_phase ?? '-'
+        `${r.load?.status ?? '-'} - ${r.load?.battery ?? '-'}`,
+        r.test_phase ?? '-'
       ].join(','));
       const blob = new Blob([header + '\n' + rows.join('\n')], { type: 'text/csv' });
       const a = document.createElement('a');
