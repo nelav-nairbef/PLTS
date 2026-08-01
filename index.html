@@ -29,6 +29,7 @@
       --glass-border: rgba(255, 255, 255, 0.75);
       --glass-shadow: 0 8px 40px rgba(0, 0, 0, 0.04), 0 1px 4px rgba(0, 0, 0, 0.02);
       --glass-hi: inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      --glass-lo: inset 0 -1px 0 rgba(0, 0, 0, 0.03);
       --radius-card: 22px;
       --radius-sm: 12px;
     }
@@ -783,16 +784,34 @@
       } catch (err) { console.error('Gagal fetch /status:', err); }
     }
 
+    // ===== [PERBAIKAN] fetchHistory tanpa orderBy, sorting manual =====
     async function fetchHistory() {
       try {
-        const resp = await fetch(`${DB_URL}/history.json?orderBy="$key"&limitToLast=200`);
+        const resp = await fetch(`${DB_URL}/history.json`);
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const raw = await resp.json();
-        if (!raw) { allHistory = []; renderTable(); renderPagination(); return; }
-        allHistory = Object.values(raw).sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''));
+        console.log('📦 Data history mentah dari Firebase:', raw);
+
+        if (!raw) {
+          allHistory = [];
+          renderTable();
+          renderPagination();
+          return;
+        }
+
+        // Ubah object ke array dan urutkan berdasarkan timestamp (descending)
+        allHistory = Object.values(raw).sort((a, b) => {
+          const tA = a.timestamp || '';
+          const tB = b.timestamp || '';
+          return tB.localeCompare(tA); // terbaru di atas
+        });
+
+        console.log('✅ Data history setelah diurutkan:', allHistory);
         renderTable();
         renderPagination();
-      } catch (err) { console.error('Gagal fetch /history:', err); }
+      } catch (err) {
+        console.error('❌ Gagal fetch /history:', err);
+      }
     }
 
     // ===== TABLE =====
@@ -804,8 +823,8 @@
       }
       const pageRows = allHistory.slice(tablePage * ROWS_PER_PAGE, (tablePage + 1) * ROWS_PER_PAGE);
       tbody.innerHTML = pageRows.map(r => {
-        const v1 = parseFloat(r.battery_1?.voltage ?? 0).toFixed(2);
-        const v2 = parseFloat(r.battery_2?.voltage ?? 0).toFixed(2);
+        const v1 = parseFloat(r.battery_1?.voltage ?? r.battery_utama?.voltage ?? 0).toFixed(2);
+        const v2 = parseFloat(r.battery_2?.voltage ?? r.battery_backup?.voltage ?? 0).toFixed(2);
         const iC = parseFloat(r.charging?.current ?? 0).toFixed(2);
         const iL = parseFloat(r.load?.current ?? 0).toFixed(2);
         const chg = `${r.charging?.status ?? '-'} · ${r.charging?.battery ?? '-'}`;
@@ -910,7 +929,7 @@
       if (!allHistory.length) return;
       const rows = [['Waktu', 'V.B1', 'V.B2', 'I.Charge', 'I.Load', 'Charging', 'Load', 'Fase']];
       allHistory.forEach(r => rows.push([
-        r.timestamp ?? '-', parseFloat(r.battery_1?.voltage ?? 0), parseFloat(r.battery_2?.voltage ?? 0),
+        r.timestamp ?? '-', parseFloat(r.battery_1?.voltage ?? r.battery_utama?.voltage ?? 0), parseFloat(r.battery_2?.voltage ?? r.battery_backup?.voltage ?? 0),
         parseFloat(r.charging?.current ?? 0), parseFloat(r.load?.current ?? 0),
         `${r.charging?.status ?? '-'} - ${r.charging?.battery ?? '-'}`,
         `${r.load?.status ?? '-'} - ${r.load?.battery ?? '-'}`, r.test_phase ?? '-'
@@ -924,8 +943,8 @@
       const header = 'Waktu,V.B1,V.B2,I.Charge,I.Load,Charging,Load,Fase';
       const rows = allHistory.map(r => [
         r.timestamp ?? '-',
-        parseFloat(r.battery_1?.voltage ?? 0).toFixed(2),
-        parseFloat(r.battery_2?.voltage ?? 0).toFixed(2),
+        parseFloat(r.battery_1?.voltage ?? r.battery_utama?.voltage ?? 0).toFixed(2),
+        parseFloat(r.battery_2?.voltage ?? r.battery_backup?.voltage ?? 0).toFixed(2),
         parseFloat(r.charging?.current ?? 0).toFixed(2),
         parseFloat(r.load?.current ?? 0).toFixed(2),
         `${r.charging?.status ?? '-'} - ${r.charging?.battery ?? '-'}`,
